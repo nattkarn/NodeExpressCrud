@@ -1,6 +1,7 @@
 import { register } from "prom-client";
 import UserService from "../services/users.service.js";
 import bcrypt from 'bcryptjs'
+import User from '../models/user.schema.js'
 
 const AuthController = {
   getStatus: (req, res) => {
@@ -34,11 +35,14 @@ const AuthController = {
   },
   userRegister: async (req, res) => {
 
-    console.log(req.body)
-    const { username, name, password, email, token } = req.body;
+    
     
     // ToDO: 1. CheckUser
+    // console.log(req.body)
+    const { username, name, password, email, token } = req.body;
 
+    const userNameCheck = await UserService.findUsername({ username })
+    console.log(`userNameCheck: ${userNameCheck}`)
     // ToDO: 2. Encrypt Password
 
     // ToDO: 3. Save to DB

@@ -11,20 +11,20 @@ const UserService = {
     return UserModel.findById(id);
   },
   findUsername: ({ username }) => {
-    return UserModel.find({ username });
+    return UserModel.findOne({ username });
   },
   findEmail: ({ email }) => {
-    return UserModel.find({ email });
+    return UserModel.findOne({ email });
   },
   findName: ({ name }) => {
-    return UserModel.find({ name });
+    return UserModel.findOne({ name });
   },
   updateOne: (id, payload) => {
     return UserModel.findOneAndUpdate(id, { $set: payload });
   },
   delete: (id) => {
     return UserModel.findByIdAndDelete(id);
-  },
+  }
 };
 
 export default UserService;
