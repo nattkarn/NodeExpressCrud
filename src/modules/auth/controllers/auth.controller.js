@@ -93,7 +93,7 @@ const AuthController = {
         jwt.sign(
           payload,
           process.env.SECRETKEY,
-          { expiresIn: 30 },
+          { expiresIn: 600 },
           (err, token) => {
             if (err) {
               throw err;

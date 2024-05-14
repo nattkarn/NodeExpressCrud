@@ -51,15 +51,15 @@ const productController = {
       res.status(500).send("Server Error");
     }
   },
-  addProduct: async (req, res) => {
-    const { title, description, price } = req.body;
-    const created = await ProductService.create({ title, description, price });
+  addProduct: (req, res) => {
+    // const { title, description, price } = req.body;
+    // const created = await ProductService.create({ title, description, price });
     try {
       res.status(201).json({
         success: true,
         timestamp: new Date(),
         data: {
-          result: created,
+          result: "created",
         },
       });
     } catch (err) {
