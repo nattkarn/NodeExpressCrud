@@ -22,4 +22,6 @@ AppMiddleWare.use(cors())
 AppMiddleWare.use(morgan("dev"))
 AppMiddleWare.use(bodyParser.json({ limit: '10mb'}))
 
+
+
 export default AppMiddleWare;

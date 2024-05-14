@@ -24,6 +24,12 @@ const UserService = {
   },
   delete: (id) => {
     return UserModel.findByIdAndDelete(id);
+  },
+  findUsernameAndUpdate: ({ username }) => {
+    return UserModel.findOneAndUpdate({ username }, {new:true});
+  },
+  findByIdAndUpdate: (id , payload) => {
+    return UserModel.findByIdAndUpdate(id , { $set:payload }, {new:true})
   }
 };
 
