@@ -1,9 +1,9 @@
-import ProductService from "../services/products.service.js"
-
+import ProductService from "../services/products.service.js";
+import fs from "fs";
 const productController = {
   getProduct: async (req, res) => {
     const product = await ProductService.getAll();
-    
+
     try {
       res.status(200).json({
         success: true,
@@ -51,15 +51,23 @@ const productController = {
       res.status(500).send("Server Error");
     }
   },
-  addProduct: (req, res) => {
+  addProduct: async (req, res) => {
     // const { title, description, price } = req.body;
-    // const created = await ProductService.create({ title, description, price });
+    //
+
+    var data = req.body;
+
+    if (req.file) {
+      data.file = req.file.filename;
+    }
+
     try {
+      const created = await ProductService.create(data);
       res.status(201).json({
         success: true,
         timestamp: new Date(),
         data: {
-          result: "created",
+          result: created,
         },
       });
     } catch (err) {
@@ -69,13 +77,15 @@ const productController = {
   },
   updateProduct: async (req, res) => {
     const { id } = req.params;
-    const { title, description, price } = req.body;
+
     const filter = { _id: id };
-    const updated = await ProductService.updateOne(filter, {
-      title,
-      description,
-      price,
-    });
+
+    var data = req.body;
+    if (req.file) {
+      data.file = req.file.filename;
+    }
+
+    const updated = await ProductService.updateOne(filter, data);
     console.log("Before Update:", updated);
     const product = await ProductService.getOne(id);
     console.log("Updated:", product);
@@ -96,15 +106,31 @@ const productController = {
   deleteProduct: async (req, res) => {
     const { id } = req.params;
     const filter = { _id: id };
-    const delProduct = await ProductService.delProduct(filter);
+
     try {
-      res.status(200).json({
-        success: true,
-        timestamp: new Date(),
-        data: {
-          result: delProduct,
-        },
-      });
+      const product = await ProductService.getOne(id);
+      if (product) {
+        const delProduct = await ProductService.delete(filter);
+        // link remove from storage
+        if (delProduct?.file) {
+          await fs.unlink("./src/uploads/" + delProduct.file, (err) => {
+            if (err) {
+              throw err;
+            } else {
+              console.log(`${delProduct.file} was deleted`);
+            }
+          });
+        }
+        res.status(200).json({
+          success: true,
+          timestamp: new Date(),
+          data: {
+            result: "delProduct",
+          },
+        });
+      } else {
+        res.status(400).send("Product not found");
+      }
     } catch (err) {
       console.log(err);
       res.status(500).send("Server Error");

@@ -12,7 +12,7 @@ export async function auth(req, res, next) {
         return res.status(401).send("Access denied. No token provided.");
     }
     const decoded = jwt.verify(token, process.env.SECRETKEY)
-    console.log(`decoded: ${decoded}`)
+    // console.log(`decoded: ${decoded}`)
     next();
   } catch (err) {
     console.log(err);

@@ -17,7 +17,7 @@ const ProductService = {
     return ProductModel.findOneAndUpdate(id, { $set: payload });
   },
   delete: (id) => {
-    return ProductModel.findByIdAndDelete(id);
+    return ProductModel.findByIdAndDelete(id)
   },
 };
 
